@@ -30,7 +30,9 @@ fn main() -> BoxResult<()> {
         let cx = (point.x * wf) as u32;
         let cy = (point.y * wf) as u32;
         for x in (r + cx)..(3 * r + cx) {
-            img.put_pixel(x, cy, image::Rgb([0f32; 3]));
+            for y in (r + cy)..(3*r + cy) {
+                img.put_pixel(x, y, image::Rgb([0f32; 3]));
+            }
         }
     }
     img.save("render.exr")?;
