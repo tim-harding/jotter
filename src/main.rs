@@ -30,11 +30,11 @@ fn main() -> BoxResult<()> {
     for point in points.iter() {
         let cx = (point.x * wf) as i32;
         let cy = (point.y * wf) as i32;
-        for x in (cx - R as i32)..(cx + R as i32) {
-            for y in (cy - R as i32)..(cy + R as i32) {
+        for x in (cx - R)..(cx + R) {
+            for y in (cy - R)..(cy + R) {
                 let xf = (x - cx) as f32;
                 let yf = (y - cy) as f32;
-                let r = (xf * xf + yf * yf) / R as f32;
+                let r = (xf * xf + yf * yf) / (R as f32) / (R as f32);
                 img.put_pixel((x + R) as u32, (y + R) as u32, image::Rgb([r; 3]));
             }
         }
