@@ -1,7 +1,9 @@
-use image::{ImageBuffer};
+use image::ImageBuffer;
 
-fn main() -> anyhow::Result<()> {
-    let mut img = ImageBuffer::from_pixel(512, 512, image::Rgb([1f32;3]));
+type BoxResult<T> = Result<T, Box<dyn std::error::Error>>;
+
+fn main() -> BoxResult<()> {
+    let mut img = ImageBuffer::from_pixel(512, 512, image::Rgb([1f32; 3]));
     for p in 0..5 {
         let gap = 512 / 5;
         let center = p * gap;
