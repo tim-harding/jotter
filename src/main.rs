@@ -19,15 +19,13 @@ const W: i32 = 512;
 fn main() -> BoxResult<()> {
     let dim = (W + 2 * R) as u32;
     let mut img = ImageBuffer::from_pixel(dim, dim, image::Rgb([1f32; 3]));
-    let points = [
-        Point::new(0.25, 0.25),
-        Point::new(0.25, 0.75),
-        Point::new(0.75, 0.25),
-        Point::new(0.75, 0.75),
-        Point::new(0.5, 0.5),
-    ];
     let wf = W as f32;
-    for point in points.iter() {
+    let mut x = 7;
+    let mut y = 11;
+    for _ in 0..4096 {
+        x = (7 * x) % 503;
+        y = (11 * y) % 509;
+        let point = Point::new(x as f32 / wf, y as f32 / wf);
         let cx = (point.x * wf) as i32;
         let cy = (point.y * wf) as i32;
         for x in (cx - R)..(cx + R) {
