@@ -11,8 +11,8 @@ fn main() -> BoxResult<()> {
     let dims = (8192u32, 4096u32);
     let dims_f = (dims.0 as f32, dims.1 as f32);
     let mut img = ImageBuffer::from_pixel(dims.0, dims.1, image::Rgb([1f32; 3]));
-    let count = 1 << 16;
-    let bound = (3.449, 4.0);
+    let count = 1 << 18;
+    let bound = (3.447, 4.0);
     for r_base in 0..count {
         let r = r_base as f32 / count as f32 * (bound.1 - bound.0) + bound.0;
         let mut x = 0.5;
@@ -31,7 +31,7 @@ fn main() -> BoxResult<()> {
                     let x_offset_f = pixel_x as f32 - screen_space.1;
                     let t = r_offset_f * r_offset_f + x_offset_f * x_offset_f;
                     let t = (t / RADIUS_F / RADIUS_F).min(1.0);
-                    let t = 1.0 - (1.0 - t) / (1 << 7) as f32;
+                    let t = 1.0 - (1.0 - t) / (1 << 9) as f32;
                     let a = img.get_pixel(pixel_r, pixel_x).0[0];
                     img.put_pixel(pixel_r, pixel_x, image::Rgb([a * t; 3]));
                 }
