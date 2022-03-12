@@ -3,7 +3,7 @@ use rand::{Rng, SeedableRng};
 
 type BoxResult<T> = Result<T, Box<dyn std::error::Error>>;
 
-const RADIUS: i32 = 3;
+const RADIUS: i32 = 2;
 const RADIUS_F: f32 = RADIUS as f32;
 
 fn main() -> BoxResult<()> {
