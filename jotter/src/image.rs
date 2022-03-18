@@ -13,9 +13,9 @@ pub struct Image {
 }
 
 impl Image {
-    pub fn new(width: usize, height: usize) -> Self {
+    pub fn new(width: usize, height: usize, pixel: f32) -> Self {
         Self {
-            pixels: vec![0f32; width * height],
+            pixels: vec![pixel; width * height],
             width,
             height,
         }
