@@ -16,10 +16,10 @@ impl<'a> View<'a> {
         let screen_space = self.to_screen(vector);
         let base_pixel = (screen_space.x as i32, screen_space.y as i32);
         for pixel_y in ((base_pixel.1 - pixel_radius - 1).max(0) as usize)
-            ..((base_pixel.1 + pixel_radius + 1) as usize).min(self.image.width() - 1)
+            ..((base_pixel.1 + pixel_radius + 1) as usize).min(self.image.height() - 1)
         {
             for pixel_x in ((base_pixel.0 - pixel_radius - 1).max(0) as usize)
-                ..((base_pixel.0 + pixel_radius + 1) as usize).min(self.image.height() - 1)
+                ..((base_pixel.0 + pixel_radius + 1) as usize).min(self.image.width() - 1)
             {
                 let x_offset_f = pixel_x as f32 - screen_space.x;
                 let y_offset_f = pixel_y as f32 - screen_space.y;
