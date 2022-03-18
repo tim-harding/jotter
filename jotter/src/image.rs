@@ -26,12 +26,31 @@ impl Image {
     }
 
     pub fn set(&mut self, x: usize, y: usize, value: f32) {
-        let i = self.index(x, y);
-        self.pixels[i] = value;
+        if self.in_bounds(x, y) {
+            let i = self.index(x, y);
+            // Todo: Fix slow checked access
+            self.pixels[i] = value;
+        }
     }
 
-    pub fn get(&self, x: usize, y: usize) -> f32 {
-        self.pixels[self.index(x, y)]
+    pub fn get(&self, x: usize, y: usize) -> Option<f32> {
+        if self.in_bounds(x, y) {
+            Some(self.pixels[self.index(x, y)])
+        } else {
+            None
+        }
+    }
+
+    pub fn update(&mut self, x: usize, y: usize, callback: impl Fn(f32) -> f32) {
+        if self.in_bounds(x, y) {
+            let i = self.index(x, y);
+            let old = self.pixels[i];
+            self.pixels[i] = callback(old);
+        }
+    }
+
+    fn in_bounds(&self, x: usize, y: usize) -> bool {
+        x < self.width && y < self.height
     }
 
     fn index(&self, x: usize, y: usize) -> usize {
@@ -54,7 +73,7 @@ impl Image {
     fn save_inner(&self, path: &Path) -> Result<(), Error> {
         let channels = SpecificChannels::build()
             .with_channel_details(ChannelDescription::named("L", SampleType::F32))
-            .with_pixels(|position: Vec2<usize>| (self.get(position.x(), position.y()),));
+            .with_pixels(|position: Vec2<usize>| (self.get(position.x(), position.y()).unwrap(),));
         let layer = Layer::new(
             (self.width, self.height),
             LayerAttributes::named("beauty"),

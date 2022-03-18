@@ -26,9 +26,7 @@ impl<'a> View<'a> {
                 let t = x_offset_f * x_offset_f + y_offset_f * y_offset_f;
                 let t = (t / pixel_radius_f / pixel_radius_f).min(1.0);
                 let t = 1.0 - (1.0 - t) * opacity;
-                // Todo: Transform pixel function
-                let a = self.image.get(pixel_x, pixel_y);
-                self.image.set(pixel_x, pixel_y, a * t);
+                self.image.update(pixel_x, pixel_y, |old: f32| old * t);
             }
         }
     }
