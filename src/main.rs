@@ -15,7 +15,7 @@ fn main() -> BoxResult<()> {
     let bound = (3.447, 4.0);
     for r_base in 0..count {
         let r = r_base as f32 / count as f32 * (bound.1 - bound.0) + bound.0;
-        let mut x = 0.5;
+        let mut x = rng.gen::<f32>();
         for _ in 0..4096 {
             let r = r + rng.gen::<f32>() / count as f32;
             x = r * x * (1.0 - x);
