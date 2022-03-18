@@ -6,6 +6,10 @@ use exr::prelude::{
 use std::path::Path;
 use std::result::Result;
 
+// Todo:
+// - Multithreaded access
+// - Splat in float coords
+
 pub struct Image {
     pixels: Vec<f32>,
     width: usize,
@@ -46,6 +50,7 @@ impl Image {
         self.save_inner(path.as_ref())
     }
 
+    #[inline(never)]
     fn save_inner(&self, path: &Path) -> Result<(), Error> {
         let channels = SpecificChannels::build()
             .with_channel_details(ChannelDescription::named("L", SampleType::F32))
