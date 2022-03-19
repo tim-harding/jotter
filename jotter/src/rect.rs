@@ -32,17 +32,24 @@ impl Rect {
         }
     }
 
-    pub fn to_local(&self, vector: &Vector) -> Vector {
+    pub fn to_local(&self, vector: Vector) -> Vector {
         Vector {
             x: self.horizontal.to_local(vector.x),
             y: self.vertical.to_local(vector.y),
         }
     }
 
-    pub fn from_view(&self, vector: &Vector) -> Vector {
+    pub fn from_local(&self, vector: Vector) -> Vector {
         Vector {
-            x: self.horizontal.to_world(vector.x),
-            y: self.vertical.to_world(vector.y),
+            x: self.horizontal.from_local(vector.x),
+            y: self.vertical.from_local(vector.y),
         }
+    }
+
+    pub fn in_bounds(&self, vector: Vector) -> bool {
+        vector.x > self.horizontal.start
+            && vector.x < self.horizontal.end()
+            && vector.y > self.vertical.start
+            && vector.y < self.vertical.end()
     }
 }

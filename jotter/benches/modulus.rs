@@ -12,7 +12,7 @@ fn exponentiation() {
         let x = (n % 1024) as f32 / 1024.0;
         let y = (n / 1024) as f32 / 1024.0;
         let p = Vector::new(x, y);
-        view.splat(&p, 2, 0.5);
+        view.splat(p, 0.5);
     }
 }
 

@@ -10,24 +10,30 @@ impl<'a> View<'a> {
         Self { image, rect }
     }
 
-    pub fn splat(&mut self, vector: &Vector, pixel_radius: usize, opacity: f32) {
-        let pixel_radius_f = pixel_radius as f32;
-        let pixel_radius = pixel_radius as i32;
+    pub fn splat(&mut self, vector: Vector, opacity: f32) {
         let screen_space = self.to_screen(vector);
-        let base_pixel = (screen_space.x as i32, screen_space.y as i32);
-        for pixel_y in ((base_pixel.1 - pixel_radius - 1).max(0) as usize)
-            ..((base_pixel.1 + pixel_radius + 1) as usize).min(self.image.height() - 1)
+        let dist_x = screen_space.x.fract();
+        let dist_y = screen_space.y.fract();
+        let pixel_x = screen_space.x as usize;
+        let pixel_y = screen_space.y as usize;
+        if screen_space.x >= 0.0
+            && pixel_x < self.image.width() - 1
+            && screen_space.y >= 0.0
+            && pixel_y < self.image.height() - 1
         {
-            for pixel_x in ((base_pixel.0 - pixel_radius - 1).max(0) as usize)
-                ..((base_pixel.0 + pixel_radius + 1) as usize).min(self.image.width() - 1)
-            {
-                let x_offset_f = pixel_x as f32 - screen_space.x;
-                let y_offset_f = pixel_y as f32 - screen_space.y;
-                let t = x_offset_f * x_offset_f + y_offset_f * y_offset_f;
-                let t = (t / pixel_radius_f / pixel_radius_f).min(1.0);
-                let t = 1.0 - (1.0 - t) * opacity;
-                self.image.update(pixel_x, pixel_y, |old: f32| old * t);
-            }
+            let flip_x = 1.0 - dist_x;
+            let flip_y = 1.0 - dist_y;
+            let next_x = pixel_x + 1;
+            let next_y = pixel_y + 1;
+            self.image.update(pixel_x, pixel_y, |v| {
+                v * multiplier(opacity, dist_x, dist_y)
+            });
+            self.image
+                .update(next_x, pixel_y, |v| v * multiplier(opacity, flip_x, dist_y));
+            self.image
+                .update(pixel_x, next_y, |v| v * multiplier(opacity, dist_x, flip_y));
+            self.image
+                .update(next_x, next_y, |v| v * multiplier(opacity, flip_x, flip_y));
         }
     }
 
@@ -38,11 +44,11 @@ impl<'a> View<'a> {
                 let mut acc = 0.0;
                 for y_subsample in 0..subsamples {
                     for x_subsample in 0..subsamples {
-                        let p = Vector::new(
-                            (x * subsamples + x_subsample) as f32 / subsamples_f,
-                            (y * subsamples + y_subsample) as f32 / subsamples_f,
-                        );
-                        let p = self.from_screen(&p);
+                        let p = Vector {
+                            x: (x * subsamples + x_subsample) as f32 / subsamples_f,
+                            y: (y * subsamples + y_subsample) as f32 / subsamples_f,
+                        };
+                        let p = self.from_screen(p);
                         acc += callback(p.x, p.y) / subsamples_f / subsamples_f;
                     }
                 }
@@ -51,15 +57,15 @@ impl<'a> View<'a> {
         }
     }
 
-    fn to_view(&self, vector: &Vector) -> Vector {
+    fn to_view(&self, vector: Vector) -> Vector {
         self.rect.to_local(vector)
     }
 
-    fn from_view(&self, vector: &Vector) -> Vector {
-        self.rect.from_view(vector)
+    fn from_view(&self, vector: Vector) -> Vector {
+        self.rect.from_local(vector)
     }
 
-    fn to_screen(&self, vector: &Vector) -> Vector {
+    fn to_screen(&self, vector: Vector) -> Vector {
         let vector = self.to_view(vector);
         Vector {
             x: vector.x * self.image.width() as f32,
@@ -67,11 +73,15 @@ impl<'a> View<'a> {
         }
     }
 
-    fn from_screen(&self, vector: &Vector) -> Vector {
+    fn from_screen(&self, vector: Vector) -> Vector {
         let vector = Vector {
-            x: vector.x / self.image.width()  as f32,
+            x: vector.x / self.image.width() as f32,
             y: vector.y / self.image.height() as f32,
         };
-        self.from_view(&vector)
+        self.from_view(vector)
     }
+}
+
+fn multiplier(opacity: f32, x: f32, y: f32) -> f32 {
+    1.0 - opacity * (1.0 - x * x * y * y)
 }

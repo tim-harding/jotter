@@ -20,7 +20,11 @@ impl Range {
         (world - self.start) / self.length
     }
 
-    pub fn to_world(&self, local: f32) -> f32 {
+    pub fn from_local(&self, local: f32) -> f32 {
         local * self.length + self.start
+    }
+
+    pub fn end(&self) -> f32 {
+        self.start + self.length
     }
 }
