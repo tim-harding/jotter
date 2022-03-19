@@ -30,7 +30,7 @@ fn main() -> Result<(), jotter::Error> {
     {
         spiral.next();
         let two = spiral.next();
-        view.splat(two, 0.5);
+        view.splat(two, 1.0);
     }
     for i in 1..ODDS_COUNT {
         let is_prime = !is_composite_vec[i];
@@ -43,7 +43,7 @@ fn main() -> Result<(), jotter::Error> {
                 is_composite_vec.set(mask, true);
                 mask += number;
             }
-            view.splat(p, 0.5);
+            view.splat(p, 1.0);
         }
     }
     image.save("ulam_spiral.exr")?;

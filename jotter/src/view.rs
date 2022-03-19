@@ -12,24 +12,22 @@ impl<'a> View<'a> {
 
     pub fn splat(&mut self, vector: Vector, opacity: f32) {
         let screen_space = self.to_screen(vector);
-        let dist_x = screen_space.x.fract();
-        let dist_y = screen_space.y.fract();
+        let p = Vector {
+            x: screen_space.x.fract(),
+            y: screen_space.y.fract(),
+        };
         let pixel_x = screen_space.x as usize;
         let pixel_y = screen_space.y as usize;
-        if pixel_x < self.image.width() - 1 && pixel_y < self.image.height() - 1 {
-            let flip_x = 1.0 - dist_x;
-            let flip_y = 1.0 - dist_y;
-            let next_x = pixel_x + 1;
-            let next_y = pixel_y + 1;
-            self.image.update(pixel_x, pixel_y, |v| {
-                v * multiplier(opacity, dist_x, dist_y)
-            });
-            self.image
-                .update(next_x, pixel_y, |v| v * multiplier(opacity, flip_x, dist_y));
-            self.image
-                .update(pixel_x, next_y, |v| v * multiplier(opacity, dist_x, flip_y));
-            self.image
-                .update(next_x, next_y, |v| v * multiplier(opacity, flip_x, flip_y));
+        if pixel_x < self.image.width() - 2 && pixel_y < self.image.height() - 2 {
+            for offset_y in 0..3 {
+                for offset_x in 0..3 {
+                    let base = Vector::new(-0.5 + offset_x as f32, -0.5 + offset_y as f32);
+                    self.image
+                        .update(pixel_x + offset_x, pixel_y + offset_y, |v| {
+                            v * multiplier(opacity, p, base)
+                        })
+                }
+            }
         }
     }
 
@@ -78,6 +76,6 @@ impl<'a> View<'a> {
     }
 }
 
-fn multiplier(opacity: f32, x: f32, y: f32) -> f32 {
-    1.0 - opacity * (1.0 - x * x + y * y)
+fn multiplier(opacity: f32, p: Vector, base: Vector) -> f32 {
+    1.0 - opacity * (1.0 - (p.square_distance(base) / 2.25).min(1.0))
 }
