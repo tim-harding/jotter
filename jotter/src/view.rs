@@ -79,5 +79,5 @@ impl<'a> View<'a> {
 }
 
 fn multiplier(opacity: f32, x: f32, y: f32) -> f32 {
-    1.0 - opacity * (1.0 - x * x * y * y)
+    1.0 - opacity * (1.0 - x * x + y * y)
 }
