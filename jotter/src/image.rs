@@ -8,7 +8,8 @@ use std::result::Result;
 
 // Todo:
 // - Multithreaded access
-// - Splat in float coords
+// - Block-based storage
+// - Guarantee 64-byte aligned rows for shading
 
 pub struct Image {
     pixels: Vec<f32>,
