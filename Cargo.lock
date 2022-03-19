@@ -717,7 +717,6 @@ dependencies = [
 name = "ulam_spiral"
 version = "0.1.0"
 dependencies = [
- "bitvec",
  "jotter",
 ]
 

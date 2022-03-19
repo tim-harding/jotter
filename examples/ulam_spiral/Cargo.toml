@@ -5,4 +5,3 @@ edition = "2021"
 
 [dependencies]
 jotter = { path = "../../jotter" }
-bitvec = "1.0.0"
