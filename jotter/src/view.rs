@@ -16,11 +16,7 @@ impl<'a> View<'a> {
         let dist_y = screen_space.y.fract();
         let pixel_x = screen_space.x as usize;
         let pixel_y = screen_space.y as usize;
-        if screen_space.x >= 0.0
-            && pixel_x < self.image.width() - 1
-            && screen_space.y >= 0.0
-            && pixel_y < self.image.height() - 1
-        {
+        if pixel_x < self.image.width() - 1 && pixel_y < self.image.height() - 1 {
             let flip_x = 1.0 - dist_x;
             let flip_y = 1.0 - dist_y;
             let next_x = pixel_x + 1;
