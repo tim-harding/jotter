@@ -7,6 +7,17 @@ pub struct Rect {
 }
 
 impl Rect {
+    pub const SQUARE: Rect = Rect {
+        horizontal: Range {
+            start: 0.0,
+            length: 1.0,
+        },
+        vertical: Range {
+            start: 0.0,
+            length: 1.0,
+        },
+    };
+
     pub fn new(horizontal: Range, vertical: Range) -> Self {
         Self {
             horizontal,

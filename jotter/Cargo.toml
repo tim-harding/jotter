@@ -6,3 +6,10 @@ edition = "2021"
 [dependencies]
 exr = "1.4.1"
 thiserror = "1.0.30"
+
+[dev-dependencies]
+criterion = "0.3.5"
+
+[[bench]]
+name = "modulus"
+harness = false
