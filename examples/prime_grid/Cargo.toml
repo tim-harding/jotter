@@ -1,0 +1,8 @@
+[package]
+name = "prime_grid"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+jotter = { path = "../../jotter" }
+bitvec = "1.0.0"
