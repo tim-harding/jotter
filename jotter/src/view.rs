@@ -33,8 +33,8 @@ impl<'a> View<'a> {
 
     pub fn shade(&mut self, subsamples: usize, callback: impl Fn(f32, f32) -> f32) {
         let subsamples_f = subsamples as f32;
-        for y in 0..self.image.width() {
-            for x in 0..self.image.height() {
+        for y in 0..self.image.height() {
+            for x in 0..self.image.width() {
                 let mut acc = 0.0;
                 for y_subsample in 0..subsamples {
                     for x_subsample in 0..subsamples {

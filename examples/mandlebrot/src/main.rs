@@ -4,8 +4,13 @@ use jotter::{Image, Rect, View};
 mod complex;
 
 fn main() -> Result<(), jotter::Error> {
-    let mut image = Image::new(1024, 1024, 0.0);
-    let rect = Rect::with_bounds(-1.0, 1.0, -1.0, 1.0);
+    let rect = Rect::with_bounds(-1.44, 0.44, -1.44, 1.44);
+    let res = 1024;
+    let mut image = Image::new(
+        (rect.horizontal.length * res as f32) as usize,
+        (rect.vertical.length * res as f32) as usize,
+        0.0,
+    );
     let mut view = View::new(&mut image, rect);
     view.shade(1, |x: f32, y: f32| {
         let point = Complex::new(x, y);
