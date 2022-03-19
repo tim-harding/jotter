@@ -28,6 +28,7 @@ impl PositionIterator {
     }
 
     pub fn next(&mut self) -> (usize, usize) {
+        let out = (self.x, self.y);
         match self.direction {
             Direction::Right => self.x += 1,
             Direction::Up => self.y += 1,
@@ -48,7 +49,7 @@ impl PositionIterator {
             };
             self.step = 0;
         }
-        (self.x, self.y)
+        out
     }
 }
 
@@ -58,7 +59,11 @@ fn main() -> Result<(), jotter::Error> {
     let mut position = PositionIterator::new(DIM / 2 + 1, DIM / 2 + 1);
     const ODDS_COUNT: usize = DIM * DIM / 2;
     let mut is_composite_vec: BitArr!(for ODDS_COUNT) = BitArray::ZERO;
+    position.next(); // 1
+    let two = position.next();
+    image.set(two.0, two.1, 1.0);
     for i in 1..ODDS_COUNT {
+        // Iteration starts at 3
         let is_prime = !is_composite_vec[i];
         let p = position.next();
         position.next();
