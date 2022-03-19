@@ -31,8 +31,32 @@ impl<'a> View<'a> {
         }
     }
 
+    pub fn shade(&mut self, subsamples: usize, callback: impl Fn(f32, f32) -> f32) {
+        let subsamples_f = subsamples as f32;
+        for y in 0..self.image.width() {
+            for x in 0..self.image.height() {
+                let mut acc = 0.0;
+                for y_subsample in 0..subsamples {
+                    for x_subsample in 0..subsamples {
+                        let p = Vector::new(
+                            (x * subsamples + x_subsample) as f32 / subsamples_f,
+                            (y * subsamples + y_subsample) as f32 / subsamples_f,
+                        );
+                        let p = self.from_screen(&p);
+                        acc += callback(p.x, p.y) / subsamples_f / subsamples_f;
+                    }
+                }
+                self.image.set(x, y, acc);
+            }
+        }
+    }
+
     fn to_view(&self, vector: &Vector) -> Vector {
         self.rect.to_local(vector)
+    }
+
+    fn from_view(&self, vector: &Vector) -> Vector {
+        self.rect.from_view(vector)
     }
 
     fn to_screen(&self, vector: &Vector) -> Vector {
@@ -41,5 +65,13 @@ impl<'a> View<'a> {
             x: vector.x * self.image.width() as f32,
             y: vector.y * self.image.height() as f32,
         }
+    }
+
+    fn from_screen(&self, vector: &Vector) -> Vector {
+        let vector = Vector {
+            x: vector.x / self.image.width()  as f32,
+            y: vector.y / self.image.height() as f32,
+        };
+        self.from_view(&vector)
     }
 }

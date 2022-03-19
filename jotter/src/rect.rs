@@ -28,7 +28,7 @@ impl Rect {
         }
     }
 
-    pub fn to_world(&self, vector: &Vector) -> Vector {
+    pub fn from_view(&self, vector: &Vector) -> Vector {
         Vector {
             x: self.horizontal.to_world(vector.x),
             y: self.vertical.to_world(vector.y),
