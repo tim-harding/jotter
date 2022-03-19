@@ -21,11 +21,18 @@ impl ArchimedesSpiral {
 
 fn main() -> Result<(), jotter::Error> {
     const DIM: usize = 4096;
+    const SQRT_PRIME_COUNT: usize = 1 << 12;
+    const SQRT_PRIME_COUNT_F: f32 = SQRT_PRIME_COUNT as f32;
     let mut image = Image::new(DIM, DIM, 1.0);
-    let rect = Rect::with_bounds(-4096.0, 4096.0, -4096.0, 4096.0);
+    let rect = Rect::with_bounds(
+        -SQRT_PRIME_COUNT_F,
+        SQRT_PRIME_COUNT_F,
+        -SQRT_PRIME_COUNT_F,
+        SQRT_PRIME_COUNT_F,
+    );
     let mut view = View::new(&mut image, rect);
     let mut spiral = ArchimedesSpiral::default();
-    const ODDS_COUNT: usize = DIM * DIM / 2;
+    const ODDS_COUNT: usize = SQRT_PRIME_COUNT * SQRT_PRIME_COUNT / 2;
     let mut is_composite_vec: BitArr!(for ODDS_COUNT) = BitArray::ZERO;
     {
         spiral.next();
