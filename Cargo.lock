@@ -385,6 +385,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "mandlebrot_points"
+version = "0.1.0"
+dependencies = [
+ "jotter",
+]
+
+[[package]]
 name = "memchr"
 version = "2.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
