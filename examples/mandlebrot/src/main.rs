@@ -4,7 +4,8 @@ use jotter::{Image, Rect, View};
 mod complex;
 
 fn main() -> Result<(), jotter::Error> {
-    let rect = Rect::with_bounds(-1.44, 1.44, -1.44, 1.44);
+    const BOUND: f32 = 2.25;
+    let rect = Rect::with_bounds(-BOUND, BOUND, -BOUND, BOUND);
     let mut image = Image::new(4096, 4096, 0.0);
     let mut view = View::new(&mut image, rect);
     view.shade(3, |x: f32, y: f32| {

@@ -12,7 +12,7 @@ impl Complex {
     }
 
     pub fn abs(&self) -> f32 {
-        self.real * self.real + self.imaginary * self.imaginary
+        (self.real * self.real + self.imaginary * self.imaginary).sqrt()
     }
 }
 
