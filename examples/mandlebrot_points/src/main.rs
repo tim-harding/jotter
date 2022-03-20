@@ -3,6 +3,10 @@ use jotter::{Image, Rect, View, Vector};
 
 mod complex;
 
+// This would be a good place to introduce colors so
+// we can save the plotted points and normal Mandlebrot
+// rendering as separate channels in one pass. Also,
+// this would be a good candidate to test multithreading.
 fn main() -> Result<(), jotter::Error> {
     const DIM: usize = 4096;
     const DIM_F: f32 = DIM as f32;
